@@ -1,0 +1,26 @@
+version: "3.9"
+
+services:
+  streamlit-app:
+    build:
+      context: .
+      dockerfile: streamlit_app/Dockerfile
+    image: rhythm12/user_email_management-streamlit-app
+    ports:
+      - "0:8501"
+    depends_on:
+      - sqlite-db
+    environment:
+      - DATABASE_PATH=/data/data.db  # Environment variable for database path
+      - DB_HOST=sqlite-db  # Hostname of the database service
+
+  sqlite-db:
+    build:
+      context: .
+      dockerfile: sqldb/Dockerfile
+    image: rhythm12/user_email_management-sqlite-db
+    volumes:
+      - ./sqldb:/data  # Persistent storage for SQLite database
+
+volumes:
+  db-data:
