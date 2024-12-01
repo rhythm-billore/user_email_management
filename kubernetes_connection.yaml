@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-email-management
+  labels:
+    app: user-email-management
+spec:
+  replicas: 1  # Number of Pods to run
+  selector:
+    matchLabels:
+      app: user-email-management
+  template:
+    metadata:
+      labels:
+        app: user-email-management
+    spec:
+      containers:
+      - name: streamlit-app
+        image: rhythm12/user_email_management-streamlit-app
+        ports:
+        - containerPort: 8501
+        env:
+        - name: DATABASE_PATH
+          value: "/data/data.db"
+        - name: DB_HOST
+          value: "localhost"
+      - name: sqldb
+        image: rhythm12/user_email_management-sqlite-db
+        ports:
+        - containerPort: 5000
+        volumeMounts:
+        - name: db-volume
+          mountPath: /data
+      volumes:
+      - name: db-volume
+        emptyDir: {}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: streamlit-app-service
+  labels:
+    app: user-email-management
+spec:
+  selector:
+    app: user-email-management
+  ports:
+  - protocol: TCP
+    port: 8501  # Port exposed by the Service
+    targetPort: 8501  # Port of the container
+  type: LoadBalancer  # Change to LoadBalancer for cloud environments
