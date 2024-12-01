@@ -1,5 +1,5 @@
 FROM python:3.10-slim
-COPY . /user_email_management
+COPY streamlit_app /user_email_management
 WORKDIR /user_email_management
 RUN pip install -r requirements.txt
 EXPOSE 8501
