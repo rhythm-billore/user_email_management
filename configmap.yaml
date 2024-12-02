@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+data:
+  DB_HOST: sqlite-db-service  # Service name of the SQLite database
+  DATABASE_PATH: /data/data.db  # Path to the SQLite database
