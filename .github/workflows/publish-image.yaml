@@ -24,13 +24,17 @@ jobs:
     # Build and tag the Docker image
     - name: Build Docker Image
       run: |
-        IMAGE_NAME=rhythm12/user_email_management
+        STREAMLIT_APP_IMAGE_NAME=rhythm12/user_email_management-streamlit-app
+        SQLITE_DB_IMAGE_NAME=rhythm12/user_email_management-sqlite-db
         TAG=${GITHUB_REF##*/}
-        docker build -t $IMAGE_NAME:$TAG -f streamlit_app/Dockerfile .
+        docker build -t $STREAMLIT_APP_IMAGE_NAME:$TAG -f streamlit_app/Dockerfile .
+        docker build -t $SQLITE_DB_IMAGE_NAME:$TAG -f sqldb/Dockerfile .
 
     # Push the Docker image
     - name: Push Docker Image
       run: |
-        IMAGE_NAME=rhythm12/user_email_management
+        STREAMLIT_APP_IMAGE_NAME=rhythm12/user_email_management-streamlit-app
+        SQLITE_DB_IMAGE_NAME=rhythm12/user_email_management-sqlite-db
         TAG=${GITHUB_REF##*/}
-        docker push $IMAGE_NAME:$TAG
+        docker push $STREAMLIT_APP_IMAGE_NAME:$TAG
+        docker push $SQLITE_DB_IMAGE_NAME:$TAG
